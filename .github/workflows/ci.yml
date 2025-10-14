@@ -21,26 +21,17 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         
-    - name: 📦 Cache dependencies
-      uses: actions/cache@v3
-      with:
-        path: |
-          ~/.m2/repository
-          lib/
-        key: ${{ runner.os }}-java-${{ hashFiles('**/lib/**') }}
-        restore-keys: |
-          ${{ runner.os }}-java-
-          
-    - name: 🔍 Verify project structure
+    - name:  Verify project structure
       run: |
         echo "=== Project Structure ==="
         ls -la
         echo "=== Source files ==="
-        ls -la src/
-        echo "=== Test files ==="
-        ls -la *.java || echo "No test files in root"
+        ls -la src/ 2>/dev/null || echo "No src directory"
+        echo "=== Test file ==="
+        ls -la DateTimeCheckerTest.java 2>/dev/null || echo "Test file not in root"
+        ls -la test/DateTimeCheckerTest.java 2>/dev/null || echo "Test file not in test/"
         echo "=== Library files ==="
-        ls -la lib/ || echo "No lib directory"
+        ls -la lib/ 2>/dev/null || echo "No lib directory"
         
     - name: 📁 Create build directories
       run: |
@@ -52,101 +43,77 @@ jobs:
       run: |
         echo "Compiling DateTimeChecker.java..."
         javac -encoding UTF-8 -cp "lib/*" -d build/classes src/DateTimeChecker.java
-        echo "✓ Main source compiled successfully"
+        echo "✓ Main source compiled"
         
     - name: 🧪 Compile test source
       run: |
-        echo "Compiling DateTimeCheckerTest.java..."
-        javac -encoding UTF-8 -cp "lib/*:build/classes" -d build/test-classes DateTimeCheckerTest.java
-        echo "✓ Test source compiled successfully"
+        echo "Compiling test..."
+        # Thử compile test file ở root trước
+        if [ -f "DateTimeCheckerTest.java" ]; then
+          echo "Found test in root directory"
+          javac -encoding UTF-8 -cp "lib/*:build/classes" -d build/test-classes DateTimeCheckerTest.java
+        elif [ -f "test/DateTimeCheckerTest.java" ]; then
+          echo "Found test in test/ directory, copying to root..."
+          cp test/DateTimeCheckerTest.java .
+          javac -encoding UTF-8 -cp "lib/*:build/classes" -d build/test-classes DateTimeCheckerTest.java
+        else
+          echo "❌ Test file not found!"
+          exit 1
+        fi
+        echo "✓ Test compiled"
         
     - name: 🚀 Run JUnit tests with JaCoCo coverage
       run: |
-        echo "Running all 15 test cases with coverage..."
+        echo "Running tests with coverage..."
         java -javaagent:lib/jacoco/jacocoagent.jar=destfile=coverage/jacoco.exec \
           -cp "build/classes:build/test-classes:lib/*" \
           org.junit.platform.console.ConsoleLauncher \
           --scan-classpath \
           --classpath=build/test-classes \
-          --details=verbose
+          --details=summary
         echo "✓ Tests completed"
         
     - name: 📊 Generate coverage report
       run: |
-        echo "Generating JaCoCo coverage reports..."
+        echo "Generating coverage reports..."
         java -jar lib/jacoco/jacococli.jar report coverage/jacoco.exec \
           --classfiles build/classes \
           --sourcefiles src \
           --html coverage/html \
           --xml coverage/coverage.xml \
           --csv coverage/coverage.csv
-        echo "✓ Coverage reports generated"
+        echo "✓ Coverage generated"
         
     - name: 📈 Display coverage summary
       run: |
         echo "=== Coverage Summary ==="
         if [ -f coverage/coverage.csv ]; then
-          cat coverage/coverage.csv
-        else
-          echo "Coverage CSV not found"
+          head -5 coverage/coverage.csv
         fi
         
     - name: 📤 Upload coverage report
       uses: actions/upload-artifact@v3
+      if: always()
       with:
         name: coverage-report
         path: coverage/html/
         retention-days: 30
         
-    - name: 📤 Upload JaCoCo execution data
-      uses: actions/upload-artifact@v3
-      with:
-        name: jacoco-exec
-        path: coverage/jacoco.exec
-        retention-days: 30
-        
-    - name: 💬 Comment coverage on PR (optional)
-      if: github.event_name == 'pull_request'
-      uses: actions/github-script@v7
-      with:
-        script: |
-          const fs = require('fs');
-          let coverageText = '## 📊 Coverage Report\n\n';
-          
-          try {
-            const csvContent = fs.readFileSync('coverage/coverage.csv', 'utf8');
-            const lines = csvContent.split('\n');
-            
-            coverageText += '```\n' + lines.slice(0, 5).join('\n') + '\n```\n\n';
-            coverageText += '✅ All 15 test cases executed successfully!\n';
-            coverageText += '\n📥 [Download full coverage report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})';
-          } catch (error) {
-            coverageText += '⚠️ Could not read coverage data';
-          }
-          
-          github.rest.issues.createComment({
-            issue_number: context.issue.number,
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            body: coverageText
-          });
-          
-    - name: ✅ Build success notification
+    - name: ✅ Build success
       if: success()
       run: |
         echo "========================================="
         echo "✅ BUILD SUCCESSFUL!"
         echo "========================================="
         echo "✓ Compilation: PASSED"
-        echo "✓ Tests (15 cases): PASSED"
-        echo "✓ Coverage Report: GENERATED"
+        echo "✓ Tests: PASSED"
+        echo "✓ Coverage: GENERATED"
         echo "========================================="
         
-    - name: ❌ Build failure notification
+    - name: ❌ Build failure
       if: failure()
       run: |
         echo "========================================="
         echo "❌ BUILD FAILED!"
-        echo "========================================="
-        echo "Please check the logs above for details"
+        echo "Check logs above for details"
         echo "========================================="
