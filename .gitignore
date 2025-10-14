@@ -1,0 +1,17 @@
+# Build artifacts 
+build/ 
+*.class 
+
+# Coverage reports 
+coverage/ 
+*.exec 
+
+# IDE files 
+.vscode/ 
+.idea/ 
+*.iml 
+
+# OS files 
+.DS_Store 
+Thumbs.db 
+desktop.ini 

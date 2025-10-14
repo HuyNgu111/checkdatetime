@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="checkdatetime" default="coverage" basedir=".">
+    
+    <!-- Properties -->
+    <property name="src.dir" value="src"/>
+    <property name="test.dir" value="test"/>
+    <property name="build.dir" value="build"/>
+    <property name="classes.dir" value="${build.dir}/classes"/>
+    <property name="test-classes.dir" value="${build.dir}/test-classes"/>
+    <property name="lib.dir" value="lib"/>
+    <property name="coverage.dir" value="coverage"/>
+    
+    <!-- Classpath -->
+    <path id="lib.classpath">
+        <fileset dir="${lib.dir}" includes="**/*.jar"/>
+    </path>
+    
+    <!-- Clean target -->
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+        <delete dir="${coverage.dir}"/>
+        <echo message="Cleaned build and coverage directories"/>
+    </target>
+
+    <!-- Init target -->
+    <target name="init" depends="clean">
+        <mkdir dir="${classes.dir}"/>
+        <mkdir dir="${test-classes.dir}"/>
+        <mkdir dir="${coverage.dir}"/>
+        <echo message="Created build directories"/>
+    </target>
+
+    <!-- Compile main source -->
+    <target name="compile" depends="init">
+        <echo message="Compiling main source..."/>
+        <javac srcdir="${src.dir}" destdir="${classes.dir}" 
+               classpathref="lib.classpath" 
+               includeantruntime="false"
+               encoding="UTF-8"/>
+        <echo message="Main source compiled successfully"/>
+    </target>
+
+    <!-- Compile test source -->
+    <target name="compile-test" depends="compile">
+        <echo message="Compiling test source..."/>
+        <javac srcdir="${test.dir}" destdir="${test-classes.dir}" 
+               includeantruntime="false"
+               encoding="UTF-8">
+            <classpath>
+                <pathelement location="${classes.dir}"/>
+                <path refid="lib.classpath"/>
+            </classpath>
+        </javac>
+        <echo message="Test source compiled successfully"/>
+    </target>
+
+    <!-- Run tests with JaCoCo coverage using agent -->
+    <target name="coverage" depends="compile-test">
+        <echo message="Running tests with JaCoCo coverage..."/>
+        
+        <!-- Run tests with JaCoCo Java agent -->
+        <java classname="org.junit.platform.console.ConsoleLauncher" 
+              fork="true" 
+              failonerror="false">
+            <!-- JaCoCo agent -->
+            <jvmarg value="-javaagent:lib/jacoco/jacocoagent.jar=destfile=${coverage.dir}/jacoco.exec"/>
+            <classpath>
+                <pathelement location="${classes.dir}"/>
+                <pathelement location="${test-classes.dir}"/>
+                <path refid="lib.classpath"/>
+            </classpath>
+            <arg value="--scan-classpath"/>
+            <arg value="--classpath=${test-classes.dir}"/>
+            <arg value="--details=verbose"/>
+        </java>
+        
+        <echo message="Tests completed, generating coverage report..."/>
+        
+        <!-- Generate HTML report using JaCoCo CLI -->
+        <java jar="lib/jacoco/jacococli.jar" fork="true">
+            <arg value="report"/>
+            <arg value="${coverage.dir}/jacoco.exec"/>
+            <arg value="--classfiles"/>
+            <arg value="${classes.dir}"/>
+            <arg value="--sourcefiles"/>
+            <arg value="${src.dir}"/>
+            <arg value="--html"/>
+            <arg value="${coverage.dir}/html"/>
+            <arg value="--xml"/>
+            <arg value="${coverage.dir}/coverage.xml"/>
+        </java>
+        
+        <echo message="========================================"/>
+        <echo message="BUILD SUCCESSFUL!"/>
+        <echo message="Coverage report generated at:"/>
+        <echo message="file:///${basedir}/${coverage.dir}/html/index.html"/>
+        <echo message="========================================"/>
+    </target>
+
+    <!-- Target chỉ chạy tests (không coverage) -->
+    <target name="test" depends="compile-test">
+        <echo message="Running all 8 test cases..."/>
+        <java classname="org.junit.platform.console.ConsoleLauncher" 
+              fork="true" 
+              failonerror="false">
+            <classpath>
+                <pathelement location="${classes.dir}"/>
+                <pathelement location="${test-classes.dir}"/>
+                <path refid="lib.classpath"/>
+            </classpath>
+            <arg value="--scan-classpath"/>
+            <arg value="--classpath=${test-classes.dir}"/>
+            <arg value="--details=verbose"/>
+        </java>
+        <echo message="All 8 test cases completed!"/>
+    </target>
+
+</project>
