@@ -85,15 +85,21 @@ if %ERRORLEVEL% NEQ 0 (
 
 echo.
 echo [7/7] Pushing to GitHub...
-echo Checking current branch...
-git branch --show-current >nul 2>&1
+echo.
+echo Checking if there are commits...
+git rev-parse HEAD >nul 2>&1
 if %ERRORLEVEL% NEQ 0 (
-    echo Creating main branch...
-    git branch -M main
+    echo ⚠ No commits found! Creating initial commit...
+    git add .
+    git commit -m "Initial commit: DateTimeChecker project with 15 JUnit tests and CI/CD"
 )
 
 echo.
-echo Pushing to remote...
+echo Renaming branch to main...
+git branch -M main
+
+echo.
+echo Pushing to remote repository...
 git push -u origin main
 
 if %ERRORLEVEL% EQU 0 (
