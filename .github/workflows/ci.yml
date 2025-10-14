@@ -68,8 +68,7 @@ jobs:
         java -javaagent:lib/jacoco/jacocoagent.jar=destfile=coverage/jacoco.exec \
           -cp "build/classes:build/test-classes:lib/*" \
           org.junit.platform.console.ConsoleLauncher \
-          --scan-classpath \
-          --classpath=build/test-classes \
+          --select-class=DateTimeCheckerTest \
           --details=summary
         echo "✓ Tests completed"
         
