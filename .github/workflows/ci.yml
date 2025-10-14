@@ -42,7 +42,7 @@ jobs:
     - name: 🔨 Compile main source
       run: |
         echo "Compiling DateTimeChecker.java..."
-        javac -encoding UTF-8 -cp "lib/*" -d build/classes src/DateTimeChecker.java
+        javac -source 17 -target 17 -encoding UTF-8 -cp "lib/*" -d build/classes src/DateTimeChecker.java
         echo "✓ Main source compiled"
         
     - name: 🧪 Compile test source
@@ -51,11 +51,11 @@ jobs:
         # Thử compile test file ở root trước
         if [ -f "DateTimeCheckerTest.java" ]; then
           echo "Found test in root directory"
-          javac -encoding UTF-8 -cp "lib/*:build/classes" -d build/test-classes DateTimeCheckerTest.java
+          javac -source 17 -target 17 -encoding UTF-8 -cp "lib/*:build/classes" -d build/test-classes DateTimeCheckerTest.java
         elif [ -f "test/DateTimeCheckerTest.java" ]; then
           echo "Found test in test/ directory, copying to root..."
           cp test/DateTimeCheckerTest.java .
-          javac -encoding UTF-8 -cp "lib/*:build/classes" -d build/test-classes DateTimeCheckerTest.java
+          javac -source 17 -target 17 -encoding UTF-8 -cp "lib/*:build/classes" -d build/test-classes DateTimeCheckerTest.java
         else
           echo "❌ Test file not found!"
           exit 1
