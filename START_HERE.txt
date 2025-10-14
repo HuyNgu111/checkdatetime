@@ -1,0 +1,58 @@
+╔═══════════════════════════════════════════════════════════╗
+║                                                           ║
+║     ĐÃ SỬA XONG! BÂY GIỜ LÀM THEO 3 BƯỚC NÀY:          ║
+║                                                           ║
+╚═══════════════════════════════════════════════════════════╝
+
+BƯỚC 1: TẠO REPOSITORY TRÊN GITHUB (2 phút)
+═══════════════════════════════════════════════════════
+
+1. Mở trình duyệt web
+2. Vào: https://github.com/new
+3. Điền:
+   - Repository name: checkdatetime
+   - Chọn: ⚪ Public
+   - ❌ KHÔNG tick bất kỳ checkbox nào
+4. Click "Create repository"
+5. Trên trang mới, tìm dòng có HTTPS URL
+6. Copy URL (dạng: https://github.com/USERNAME/checkdatetime.git)
+   ⚠️ Phải có USERNAME và checkdatetime.git trong URL!
+
+BƯỚC 2: CHẠY SCRIPT (1 phút)
+═══════════════════════════════════════════════════════
+
+Mở PowerShell tại thư mục này và chạy:
+
+    .\quick-fix.bat
+
+Khi hỏi URL, paste URL vừa copy từ GitHub.
+
+BƯỚC 3: TẠO TOKEN VÀ PUSH (2 phút)
+═══════════════════════════════════════════════════════
+
+A. Tạo Personal Access Token:
+   1. Vào: https://github.com/settings/tokens
+   2. Click "Generate new token (classic)"
+   3. Note: Git Access
+   4. Tick: ✅ repo
+   5. Click "Generate token"
+   6. Copy token (ghp_xxxxxxxx...)
+
+B. Push code:
+   Khi Git hỏi:
+   - Username: [GitHub username của bạn]
+   - Password: [Paste token vừa copy]
+
+═══════════════════════════════════════════════════════
+
+✅ SAU KHI PUSH THÀNH CÔNG:
+
+- Code sẽ xuất hiện trên GitHub
+- CI/CD tự động chạy (tab Actions)
+- Coverage report sẽ được tạo
+
+═══════════════════════════════════════════════════════
+
+🚀 BẮT ĐẦU NGAY: Mở https://github.com/new
+
+═══════════════════════════════════════════════════════
