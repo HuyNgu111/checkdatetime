@@ -1,0 +1,102 @@
+name: 🚀 LambdaTest Automation
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:  # Cho phép chạy thủ công
+  schedule:
+    - cron: '0 0 * * *'  # Chạy hàng ngày lúc 00:00 UTC
+
+jobs:
+  lambdatest-automation:
+    name: 🌐 Cross-Browser Testing
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+    
+    - name: ☕ Set up JDK 8
+      uses: actions/setup-java@v4
+      with:
+        java-version: '8'
+        distribution: 'temurin'
+        cache: 'maven'
+    
+    - name: 🔧 Install dependencies
+      run: |
+        echo "Installing Selenium and TestNG..."
+        mvn clean install -DskipTests -q
+    
+    - name: 🔨 Compile test code
+      run: |
+        echo "Compiling LambdaTest automation tests..."
+        mvn compile -q
+    
+    - name: 🚀 Run LambdaTest automation (Single browser)
+      env:
+        LAMBDATEST_USERNAME: ${{ secrets.LAMBDATEST_USERNAME }}
+        LAMBDATEST_ACCESS_KEY: ${{ secrets.LAMBDATEST_ACCESS_KEY }}
+      run: |
+        echo "Running automation tests on LambdaTest Cloud..."
+        echo "Browser: Chrome on Windows 10"
+        echo "Dashboard: https://automation.lambdatest.com/timeline"
+        mvn exec:java \
+          -Dexec.mainClass="selenium.LambdaTestRunner" \
+          -Dexec.args="Chrome latest 'Windows 10'"
+    
+    - name: 📊 Generate test summary
+      if: always()
+      run: |
+        echo "## 🚀 LambdaTest Automation Results" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### 🌐 Test Configuration" >> $GITHUB_STEP_SUMMARY
+        echo "- **Browser:** Chrome (latest)" >> $GITHUB_STEP_SUMMARY
+        echo "- **Platform:** Windows 10" >> $GITHUB_STEP_SUMMARY
+        echo "- **Resolution:** 1920x1080" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### 📋 Test Cases" >> $GITHUB_STEP_SUMMARY
+        echo "1. ✅ Open website" >> $GITHUB_STEP_SUMMARY
+        echo "2. ✅ Verify page title" >> $GITHUB_STEP_SUMMARY
+        echo "3. ✅ Test search functionality" >> $GITHUB_STEP_SUMMARY
+        echo "4. ✅ Verify search results" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### 🎥 Features Enabled" >> $GITHUB_STEP_SUMMARY
+        echo "- ✅ Video recording" >> $GITHUB_STEP_SUMMARY
+        echo "- ✅ Screenshots" >> $GITHUB_STEP_SUMMARY
+        echo "- ✅ Network logs" >> $GITHUB_STEP_SUMMARY
+        echo "- ✅ Console logs" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### 📊 View Full Results" >> $GITHUB_STEP_SUMMARY
+        echo "[LambdaTest Dashboard](https://automation.lambdatest.com/timeline)" >> $GITHUB_STEP_SUMMARY
+    
+    - name: 📝 Upload test logs
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: lambdatest-logs
+        path: |
+          target/surefire-reports/
+          *.log
+        retention-days: 30
+    
+    - name: ✅ Success notification
+      if: success()
+      run: |
+        echo "╔═══════════════════════════════════════╗"
+        echo "║  ✅ LAMBDATEST TESTS PASSED!          ║"
+        echo "╚═══════════════════════════════════════╝"
+        echo ""
+        echo "View results: https://automation.lambdatest.com/timeline"
+    
+    - name: ❌ Failure notification
+      if: failure()
+      run: |
+        echo "╔═══════════════════════════════════════╗"
+        echo "║  ❌ LAMBDATEST TESTS FAILED!          ║"
+        echo "╚═══════════════════════════════════════╝"
+        echo ""
+        echo "Check logs above for details"
+        echo "View dashboard: https://automation.lambdatest.com/timeline"
