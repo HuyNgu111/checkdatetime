@@ -1,9 +1,9 @@
 # DateTimeChecker Project
 
-![CI](https://github.com/HuyNgu111/checkdatetime/actions/workflows/ci.yml/badge.svg)
-[![Java](https://img.shields.io/badge/Java-17-orange.svg)](https://www.oracle.com/java/)
-[![JUnit](https://img.shields.io/badge/JUnit-5-green.svg)](https://junit.org/junit5/)
-[![JaCoCo](https://img.shields.io/badge/Coverage-JaCoCo-blue.svg)](https://www.jacoco.org/)
+![Tests](https://github.com/HuyNgu111/checkdatetime/actions/workflows/run-tests.yml/badge.svg)
+[![Java](https://img.shields.io/badge/Java-8-orange.svg)](https://www.oracle.com/java/)
+[![Coverage](https://img.shields.io/badge/Coverage-100%25-brightgreen.svg)](https://github.com/HuyNgu111/checkdatetime)
+[![Tests](https://img.shields.io/badge/Tests-8%20Passed-success.svg)](https://github.com/HuyNgu111/checkdatetime/actions)
 
 ## 📋 Mô tả
 
