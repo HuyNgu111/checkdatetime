@@ -1,0 +1,157 @@
+=== TEST DATETIME CHECKER ===
+
+1. TH?I GIAN HI?N T?I:
+Th?i gian: 2025-10-16T15:48:55.811
+Ngày: THURSDAY
+Gi?: 15:48
+
+? isWeekend(): false  [Coverage: 13%]
+? isWorkingHours(): true   [Coverage: 25%]
+? isWorkingDay(): true   [Coverage: 38%]
+? isLunchTime(): false  [Coverage: 50%]
+? isMorning(): false  [Coverage: 63%]
+? isEvening(): false  [Coverage: 75%]
+
+? Hôm nay là ngày trong tu?n ?  [Coverage: 88%]
+? ?ang trong gi? làm vi?c ?  [Coverage: 100%]
+
+? Test Case #1 Coverage: 100% (8/8 methods)
+
+2. CU?I TU?N - TH? 7:
+Th?i gian: 2025-10-18T14:30
+Ngày: SATURDAY
+Gi?: 14:30
+
+? isWeekend(): true   [Coverage: 13%]
+? isWorkingHours(): true   [Coverage: 25%]
+? isWorkingDay(): false  [Coverage: 38%]
+? isLunchTime(): false  [Coverage: 50%]
+? isMorning(): false  [Coverage: 63%]
+? isEvening(): false  [Coverage: 75%]
+
+? Hôm nay là cu?i tu?n ?  [Coverage: 88%]
+? ?ang trong gi? làm vi?c ?  [Coverage: 100%]
+
+? Test Case #2 Coverage: 100% (8/8 methods)
+
+3. CU?I TU?N - CH? NH?T:
+Th?i gian: 2025-10-19T10:00
+Ngày: SUNDAY
+Gi?: 10:00
+
+? isWeekend(): true   [Coverage: 13%]
+? isWorkingHours(): true   [Coverage: 25%]
+? isWorkingDay(): false  [Coverage: 38%]
+? isLunchTime(): false  [Coverage: 50%]
+? isMorning(): true   [Coverage: 63%]
+? isEvening(): false  [Coverage: 75%]
+
+? Hôm nay là cu?i tu?n ?  [Coverage: 88%]
+? ?ang trong gi? làm vi?c ?  [Coverage: 100%]
+
+? Test Case #3 Coverage: 100% (8/8 methods)
+
+4. NGÀY TH??NG - GI? LÀM VI?C:
+Th?i gian: 2025-10-16T09:30
+Ngày: THURSDAY
+Gi?: 9:30
+
+? isWeekend(): false  [Coverage: 13%]
+? isWorkingHours(): true   [Coverage: 25%]
+? isWorkingDay(): true   [Coverage: 38%]
+? isLunchTime(): false  [Coverage: 50%]
+? isMorning(): true   [Coverage: 63%]
+? isEvening(): false  [Coverage: 75%]
+
+? Hôm nay là ngày trong tu?n ?  [Coverage: 88%]
+? ?ang trong gi? làm vi?c ?  [Coverage: 100%]
+
+? Test Case #4 Coverage: 100% (8/8 methods)
+
+5. NGÀY TH??NG - NGOÀI GI?:
+Th?i gian: 2025-10-16T19:00
+Ngày: THURSDAY
+Gi?: 19:00
+
+? isWeekend(): false  [Coverage: 13%]
+? isWorkingHours(): false  [Coverage: 25%]
+? isWorkingDay(): false  [Coverage: 38%]
+? isLunchTime(): false  [Coverage: 50%]
+? isMorning(): false  [Coverage: 63%]
+? isEvening(): true   [Coverage: 75%]
+
+? Hôm nay là ngày trong tu?n ?  [Coverage: 88%]
+? Ngoài gi? làm vi?c ?  [Coverage: 100%]
+
+? Test Case #5 Coverage: 100% (8/8 methods)
+
+6. GI? NGH? TR?A:
+Th?i gian: 2025-10-16T12:30
+Ngày: THURSDAY
+Gi?: 12:30
+
+? isWeekend(): false  [Coverage: 13%]
+? isWorkingHours(): true   [Coverage: 25%]
+? isWorkingDay(): true   [Coverage: 38%]
+? isLunchTime(): true   [Coverage: 50%]
+? isMorning(): false  [Coverage: 63%]
+? isEvening(): false  [Coverage: 75%]
+
+? Hôm nay là ngày trong tu?n ?  [Coverage: 88%]
+? ?ang trong gi? làm vi?c ?  [Coverage: 100%]
+
+? Test Case #6 Coverage: 100% (8/8 methods)
+
+7. BU?I SÁNG S?M:
+Th?i gian: 2025-10-16T07:00
+Ngày: THURSDAY
+Gi?: 7:00
+
+? isWeekend(): false  [Coverage: 13%]
+? isWorkingHours(): false  [Coverage: 25%]
+? isWorkingDay(): false  [Coverage: 38%]
+? isLunchTime(): false  [Coverage: 50%]
+? isMorning(): true   [Coverage: 63%]
+? isEvening(): false  [Coverage: 75%]
+
+? Hôm nay là ngày trong tu?n ?  [Coverage: 88%]
+? Ngoài gi? làm vi?c ?  [Coverage: 100%]
+
+? Test Case #7 Coverage: 100% (8/8 methods)
+
+8. BU?I T?I:
+Th?i gian: 2025-10-16T20:00
+Ngày: THURSDAY
+Gi?: 20:00
+
+? isWeekend(): false  [Coverage: 13%]
+? isWorkingHours(): false  [Coverage: 25%]
+? isWorkingDay(): false  [Coverage: 38%]
+? isLunchTime(): false  [Coverage: 50%]
+? isMorning(): false  [Coverage: 63%]
+? isEvening(): true   [Coverage: 75%]
+
+? Hôm nay là ngày trong tu?n ?  [Coverage: 88%]
+? Ngoài gi? làm vi?c ?  [Coverage: 100%]
+
+? Test Case #8 Coverage: 100% (8/8 methods)
+
+============================================================
+? T?NG K?T ?? BAO PH? (COVERAGE SUMMARY)
+============================================================
+
+Các ph??ng th?c ?ã ???c test:
+  ? 1. isWeekend()                    TESTED
+  ? 2. isWorkingHours()               TESTED
+  ? 3. isWorkingDay()                 TESTED
+  ? 4. isLunchTime()                  TESTED
+  ? 5. isMorning()                    TESTED
+  ? 6. isEvening()                    TESTED
+  ? 7. getWeekendMessage()            TESTED
+  ? 8. getWorkingHoursMessage()       TESTED
+
+============================================================
+T?NG ?? BAO PH?: 100% (8/8 methods)
+============================================================
+
+=== T?T C? TEST HOÀN THÀNH ===
