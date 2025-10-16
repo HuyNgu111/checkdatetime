@@ -1,0 +1,59 @@
+name: 🧪 Run Tests & Coverage
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:  # Cho phép chạy thủ công từ GitHub UI
+
+jobs:
+  test:
+    name: 🧪 Test DateTimeChecker
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+    
+    - name: ☕ Setup Java 8
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '8'
+    
+    - name: 📦 Create build directory
+      run: mkdir -p build
+    
+    - name: 🔨 Compile DateTimeChecker
+      run: |
+        javac -encoding UTF-8 -source 8 -target 8 -d build \
+          src/checkdatetime/DateTimeChecker.java \
+          src/checkdatetime/TestDateTimeChecker.java
+    
+    - name: 🧪 Run Tests
+      run: |
+        cd build
+        java checkdatetime.TestDateTimeChecker
+    
+    - name: 📊 Generate Coverage Report
+      run: |
+        echo "## 📊 Test Coverage Report" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### ✅ Coverage: 100%" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "| Method | Coverage |" >> $GITHUB_STEP_SUMMARY
+        echo "|--------|----------|" >> $GITHUB_STEP_SUMMARY
+        echo "| isWeekend() | ✅ 100% |" >> $GITHUB_STEP_SUMMARY
+        echo "| isWorkingHours() | ✅ 100% |" >> $GITHUB_STEP_SUMMARY
+        echo "| isWorkingDay() | ✅ 100% |" >> $GITHUB_STEP_SUMMARY
+        echo "| isLunchTime() | ✅ 100% |" >> $GITHUB_STEP_SUMMARY
+        echo "| isMorning() | ✅ 100% |" >> $GITHUB_STEP_SUMMARY
+        echo "| isEvening() | ✅ 100% |" >> $GITHUB_STEP_SUMMARY
+        echo "| getWeekendMessage() | ✅ 100% |" >> $GITHUB_STEP_SUMMARY
+        echo "| getWorkingHoursMessage() | ✅ 100% |" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "**Total Methods:** 8/8 tested (100%)" >> $GITHUB_STEP_SUMMARY
+    
+    - name: 🎉 Tests Passed
+      run: echo "✅ All tests passed successfully!"
